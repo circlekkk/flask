@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>上传 ZIP 文件</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* 全局样式 */
+        body {
+            display: flex;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            width: 220px;
+            background: linear-gradient(to bottom, #2d3748, #1a202c);
+            color: white;
+            padding: 25px;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+        }
+
+        /* 侧边栏标题样式 */
+        .sidebar h2 {
+            margin-top: 0;
+            font-size: 24px;
+            font-weight: 600;
+            border-bottom: 1px solid #4a5568;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* 侧边栏链接样式 */
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .sidebar a:hover {
+            background-color: #4a5568;
+        }
+
+        /* 主内容区域样式 */
+        .main-content {
+            padding: 30px;
+            margin-left: 220px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 表单样式 */
+        form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .form-row {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        input[type="file"],
+        input[type="text"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #cbd5e0;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="file"]:focus,
+        input[type="text"]:focus {
+            border-color: #4299e1;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            background-color: #4299e1;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #3182ce;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        alert('{{ message }}');
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        };
+
+        function validateLicense() {
+            var licenseInput = document.getElementById('license');
+            var licenseValue = licenseInput.value;
+            var regex = /^\d{8}-\d{8}$/;
+            if (!regex.test(licenseValue)) {
+                alert('请输入正确的 license 有效期格式：8 位年月日格式 - 8 位年月日格式');
+                licenseInput.focus();
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+
+<body>
+    <div class="sidebar">
+        <h2>操作菜单</h2>
+        <a href="{{ url_for('upload_file') }}"><i class="fa-solid fa-key"></i> license 更新</a>
+        <a href="{{ url_for('query') }}"><i class="fa-solid fa-magnifying-glass"></i> 查询</a>
+    </div>
+    <div class="main-content">
+        <h1>上传 ZIP 文件</h1>
+        <form method="post" enctype="multipart/form-data" onsubmit="return validateLicense();">
+            <div class="form-row">
+                <label for="file">选择 ZIP 文件</label>
+                <input type="file" name="file">
+            </div>
+            <div class="form-row">
+                <label for="license">当前 license 有效期：</label>
+                <input type="text" id="license" name="license" placeholder="YYYYMMDD-YYYYMMDD">
+            </div>
+            <div class="form-row">
+                <input type="submit" value="上传">
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
