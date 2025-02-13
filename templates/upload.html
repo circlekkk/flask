@@ -141,6 +141,16 @@
                 licenseInput.focus();
                 return false;
             }
+                // 拆分日期
+            var dates = licenseValue.split('-');
+            var startDate = new Date(dates[0].substring(0, 4), parseInt(dates[0].substring(4, 6)) - 1, dates[0].substring(6, 8));
+            var endDate = new Date(dates[1].substring(0, 4), parseInt(dates[1].substring(4, 6)) - 1, dates[1].substring(6, 8));
+            // 比较日期
+            if (endDate < startDate) {
+                alert('结束日期不能早于开始日期');
+                licenseInput.focus();
+                return false;
+            }
             return true;
         }
     </script>
